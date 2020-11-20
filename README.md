@@ -1,59 +1,118 @@
-# :package_description
+# Add multiple addresses for a User
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/:vendor_name/:package_name.svg?style=flat-square)](https://packagist.org/packages/:vendor_name/:package_name)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/:vendor_name/:package_name/run-tests?label=tests)](https://github.com/:vendor_name/:package_name/actions?query=workflow%3Arun-tests+branch%3Amaster)
-[![Total Downloads](https://img.shields.io/packagist/dt/:vendor_name/:package_name.svg?style=flat-square)](https://packagist.org/packages/:vendor_name/:package_name)
-
-**Note:** Run `./configure-skeleton` to get started, or manually replace  ```:author_name``` ```:author_username``` ```:author_email``` ```:vendor_name``` ```:package_name``` ```:package_description``` with their correct values in [README.md](README.md), [CHANGELOG.md](CHANGELOG.md), [CONTRIBUTING.md](.github/CONTRIBUTING.md), [LICENSE.md](LICENSE.md) and [composer.json](composer.json) files, then delete this line. You can also run `configure-skeleton.sh` to do this automatically.
-
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/package-skeleton-laravel.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/package-skeleton-laravel)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/aecor/addressable.svg?style=flat-square)](https://packagist.org/packages/aecor/addressable)
+[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/aecor/addressable/run-tests?label=tests)](https://github.com/aecor/addressable/actions?query=workflow%3Arun-tests+branch%3Amaster)
+[![Total Downloads](https://img.shields.io/packagist/dt/aecor/addressable.svg?style=flat-square)](https://packagist.org/packages/aecor/addressable)
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require :vendor_name/:package_name
+composer require aecor/addressable
 ```
 
 You can publish and run the migrations with:
 
 ```bash
-php artisan vendor:publish --provider="Spatie\Skeleton\SkeletonServiceProvider" --tag="migrations"
+php artisan vendor:publish --provider="Aecor\Address\AddressServiceProvider" --tag="migrations"
 php artisan migrate
 ```
 
 You can publish the config file with:
 ```bash
-php artisan vendor:publish --provider="Spatie\Skeleton\SkeletonServiceProvider" --tag="config"
+php artisan vendor:publish --provider="Aecor\Address\AddressServiceProvider" --tag="config"
 ```
 
 This is the contents of the published config file:
 
 ```php
 return [
+    'table-name' => 'addresses'
 ];
 ```
 
-## Usage
-
+## Usage and few examples
+Prepare your model
 ``` php
-$skeleton = new Spatie\Skeleton();
-echo $skeleton->echoPhrase('Hello, Spatie!');
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Aecor\Address\Traits\HasAddress;
+
+class YourModel extends Model
+{
+    use HasAddress;
+}
 ```
 
-## Testing
+Get instance of your model
+``` php
+$user = \App\Models\User::find(1);
+```
 
-``` bash
-composer test
+Add a single contact
+``` php
+$user->addAddress([
+    'type' => 'office',
+    'unit' => 'A',
+    'house_number' => '10',
+    'street' => 'Some street',
+    'suburb' => 'Some suburb',
+    'postcode' => '123',
+    'custom_attributes' => [
+        'open_at' => '09:00',
+        'close_at' => '06:00'
+    ],                          // Optional field
+    'order_column' => 1         // Optional field
+]);
+```
+
+All the common fields are available in database given below, additionally you can store your own details as json in 'custom_attributes' field. All the fields are kept nullable to make it easy implementation.
+``` php
+'type'
+'unit'
+'house_number'
+'street'
+'suburb'
+'postcode'
+'state'
+'latitude'
+'longitude'
+'custom_attributes' // json field to add any additional data
+'order_column'
+```
+
+Add multiple contacts
+``` php
+$user->addManyAddresses([
+    [
+        'type' => 'home',
+        'unit' => 'A',
+        'house_number' => '10',
+        'street' => 'Some street 1',
+        'suburb' => 'Some suburb 1',
+        'postcode' => '123',
+    ],
+    [
+        'type' => 'office',
+        'unit' => 'B',
+        'house_number' => '1',
+        'street' => 'Some street 2',
+        'suburb' => 'Some suburb 2',
+        'postcode' => '456',
+    ]
+]);
+```
+
+Get all contacts
+``` php
+$user->addresses;
+```
+
+Get contacts with condition
+``` php
+$user->addresses()->where('type', 'home')->get();
 ```
 
 ## Changelog
@@ -70,7 +129,7 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [:author_name](https://github.com/:author_username)
+- [Abrar Dhalwala](https://github.com/adhalwala)
 - [All Contributors](../../contributors)
 
 ## License
