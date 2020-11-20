@@ -2,9 +2,9 @@
 
 namespace Aecor\Address\Tests;
 
+use Aecor\Address\AddressServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Aecor\Address\AddressServiceProvider;
 
 class TestCase extends Orchestra
 {
