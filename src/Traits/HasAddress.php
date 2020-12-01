@@ -20,8 +20,10 @@ trait HasAddress
 
     public function addManyAddresses(array $records)
     {
+        $addresses = [];
         foreach ($records as $record) {
-            $this->addresses()->create($record);
+            $addresses[] = $this->addresses()->create($record);
         }
+        return $addresses;
     }
 }
