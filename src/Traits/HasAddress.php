@@ -24,6 +24,7 @@ trait HasAddress
         foreach ($records as $record) {
             $addresses[] = $this->addresses()->create($record);
         }
+
         return $addresses;
     }
 }
