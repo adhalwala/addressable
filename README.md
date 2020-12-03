@@ -76,6 +76,7 @@ All the common fields are available in database given below, additionally you ca
 'street'
 'suburb'
 'postcode'
+'city'
 'state'
 'latitude'
 'longitude'

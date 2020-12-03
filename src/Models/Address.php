@@ -25,6 +25,7 @@ class Address extends Model
         'street',
         'suburb',
         'postcode',
+        'city',
         'state',
         'latitude',
         'longitude',

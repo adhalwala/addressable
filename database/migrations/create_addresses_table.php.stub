@@ -17,6 +17,7 @@ class CreateAddressesTable extends Migration
             $table->string('street')->nullable();
             $table->string('suburb')->nullable();
             $table->string('postcode')->nullable();
+            $table->string('city')->nullable();
             $table->string('state')->nullable();
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
